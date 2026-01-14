@@ -11,13 +11,13 @@ const CONFIG = {
     // ========================================
     // Google Cloud Console で取得した Client ID を設定
     // https://console.cloud.google.com/ → APIとサービス → 認証情報
-    GOOGLE_CLIENT_ID: 'YOUR_CLIENT_ID.apps.googleusercontent.com',
+    GOOGLE_CLIENT_ID: '537299528854-e7n59duh8nma38ep6qvfunsqkave73ut.apps.googleusercontent.com',
 
     // ========================================
     // Google Apps Script 設定（必須）
     // ========================================
     // GAS をウェブアプリとしてデプロイ後に取得した URL を設定
-    SHEETS_API_URL: 'https://script.google.com/macros/s/YOUR_SCRIPT_ID/exec',
+    SHEETS_API_URL: 'https://script.google.com/macros/s/AKfycbxzuiTAQVig_S3BL3Y5xdFY8a1r_jXPG4ob5msG9n6BtSr9n6Yq0pREIicCCABRRhbt/exec',
 
     // ========================================
     // アプリケーション情報
