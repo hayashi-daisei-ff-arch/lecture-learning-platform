@@ -38,11 +38,11 @@ const CONFIG = {
 
         // 許可するメールドメイン（複数指定可能）
         // 例: ['s.takaggakuen.ac.jp', 'takaggakuen.ac.jp']
-        ALLOWED_DOMAINS: ['s.takaggakuen.ac.jp'],
+        ALLOWED_DOMAINS: ['s.takagigakuen.ac.jp'],
     },
 
     // 管理者メールアドレス（スプレッドシートの Settings シートからも設定可能）
-    ADMIN_EMAILS: [],
+    ADMIN_EMAILS: ['hayashi-daisei-ff@s.takagigakuen.ac.jp'],
 
     // ========================================
     // UI設定
