@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>講義学習プラットフォーム</title>
+    <meta name="description" content="医用工学等の講義向けインタラクティブ学習プラットフォーム">
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+</head>
+<body>
+    <!-- ヘッダー -->
+    <header class="header" id="header">
+        <div class="header-content">
+            <div class="logo" onclick="returnToHome()" id="logo">
+                <span class="logo-icon">🏥</span>
+                <span class="logo-text">医用工学学習</span>
+            </div>
+            <div class="header-actions">
+                <button class="btn btn-icon" id="admin-btn" onclick="showAdminPanel()" style="display: none;" title="管理画面">
+                    ⚙️
+                </button>
+                <div class="user-info" id="user-info" style="display: none;">
+                    <span class="user-name" id="user-name"></span>
+                    <button class="btn btn-secondary btn-sm" onclick="handleLogout()">ログアウト</button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- メインコンテンツ -->
+    <main class="main-content">
+        <!-- ログイン画面 -->
+        <section class="screen login-screen" id="login-screen">
+            <div class="login-container">
+                <div class="login-card glass-card">
+                    <div class="login-header">
+                        <span class="login-icon" id="login-icon">🏥</span>
+                        <h1 id="login-title">医用工学学習<br>プラットフォーム</h1>
+                        <p class="login-description" id="login-description">
+                            医用工学の基礎を楽しく学びましょう！
+                        </p>
+                    </div>
+                    <div class="login-body">
+                        <div id="g_id_onload"
+                            data-client_id=""
+                            data-callback="handleCredentialResponse"
+                            data-auto_prompt="false">
+                        </div>
+                        <div class="g_id_signin"
+                            data-type="standard"
+                            data-size="large"
+                            data-theme="outline"
+                            data-text="signin_with"
+                            data-shape="rectangular"
+                            data-logo_alignment="left">
+                        </div>
+                        <p class="login-hint">
+                            Googleアカウントでログインして学習を始めてください
+                        </p>
+                        <!-- 匿名アクセスボタン（認証不要モード時） -->
+                        <button class="btn btn-secondary btn-full" id="anonymous-access-btn" style="display: none;" onclick="startAnonymousAccess()">
+                            ログインせずに始める
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ホーム画面 -->
+        <section class="screen home-screen" id="home-screen" style="display: none;">
+            <div class="home-container">
+                <!-- 講義資料セクション -->
+                <section class="section" id="materials-section">
+                    <h2 class="section-title">
+                        <span class="section-icon">📚</span>
+                        講義資料
+                    </h2>
+                    <div class="links-grid" id="materials-links">
+                        <!-- 動的に生成 -->
+                    </div>
+                </section>
+
+                <!-- 外部サイトリンクセクション -->
+                <section class="section" id="external-section">
+                    <h2 class="section-title">
+                        <span class="section-icon">🔗</span>
+                        外部サイト
+                    </h2>
+                    <div class="links-grid" id="external-links">
+                        <!-- 動的に生成 -->
+                    </div>
+                </section>
+
+                <!-- クイズセクション -->
+                <section class="section" id="quiz-section">
+                    <h2 class="section-title">
+                        <span class="section-icon">📝</span>
+                        クイズ
+                    </h2>
+                    <div class="levels-grid" id="levels-grid">
+                        <!-- 動的に生成 -->
+                    </div>
+                </section>
+            </div>
+        </section>
+
+        <!-- クイズ画面 -->
+        <section class="screen quiz-screen" id="quiz-screen" style="display: none;">
+            <div class="quiz-container">
+                <!-- 進捗バー -->
+                <div class="quiz-progress">
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="progress-fill"></div>
+                    </div>
+                    <div class="progress-info">
+                        <span id="progress-text">問題 1 / 10</span>
+                        <span id="timer-text" class="timer">00:00</span>
+                    </div>
+                </div>
+
+                <!-- 問題カード -->
+                <div class="question-card glass-card" id="question-card">
+                    <div class="question-header">
+                        <span class="question-number" id="question-number">Q1</span>
+                        <span class="question-type-badge" id="question-type-badge">単一選択</span>
+                    </div>
+                    <div class="question-content">
+                        <div class="question-text" id="question-text"></div>
+                        <div class="question-image" id="question-image" style="display: none;">
+                            <img id="question-img" src="" alt="問題画像">
+                        </div>
+                    </div>
+                    <div class="options-container" id="options-container">
+                        <!-- 動的に生成 -->
+                    </div>
+                    <div class="text-input-container" id="text-input-container" style="display: none;">
+                        <input type="text" class="text-input" id="text-answer-input" placeholder="回答を入力してください">
+                    </div>
+                    <div class="question-actions">
+                        <button class="btn btn-secondary" id="skip-btn" onclick="skipQuestion()">
+                            スキップ
+                        </button>
+                        <button class="btn btn-primary" id="submit-btn" onclick="submitAnswer()" disabled>
+                            回答する
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 結果表示 -->
+                <div class="result-overlay" id="result-overlay" style="display: none;">
+                    <div class="result-card glass-card" id="result-card">
+                        <div class="result-icon" id="result-icon">✅</div>
+                        <div class="result-text" id="result-text">正解！</div>
+                        <div class="result-explanation" id="result-explanation" style="display: none;"></div>
+                        <div class="result-explanation-image" id="result-explanation-image" style="display: none;">
+                            <img id="explanation-img" src="" alt="解説画像">
+                        </div>
+                        <button class="btn btn-primary btn-full" id="next-btn" onclick="nextQuestion()">
+                            次の問題へ
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- クイズ完了画面 -->
+        <section class="screen complete-screen" id="complete-screen" style="display: none;">
+            <div class="complete-container">
+                <div class="complete-card glass-card">
+                    <div class="complete-icon">🎉</div>
+                    <h2 class="complete-title">クイズ完了！</h2>
+                    <div class="complete-stats">
+                        <div class="stat-item">
+                            <span class="stat-label">正答率</span>
+                            <span class="stat-value" id="complete-accuracy">0%</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">正解数</span>
+                            <span class="stat-value" id="complete-correct">0/0</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">スキップ数</span>
+                            <span class="stat-value" id="complete-skip">0</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">所要時間</span>
+                            <span class="stat-value" id="complete-time">00:00</span>
+                        </div>
+                    </div>
+                    <div class="complete-actions">
+                        <button class="btn btn-secondary" onclick="retryQuiz()">
+                            もう一度挑戦
+                        </button>
+                        <button class="btn btn-primary" onclick="returnToHome()">
+                            ホームに戻る
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 管理画面 -->
+        <section class="screen admin-screen" id="admin-screen" style="display: none;">
+            <div class="admin-container">
+                <div class="admin-header">
+                    <h2>管理画面</h2>
+                    <button class="btn btn-secondary" onclick="returnToHome()">閉じる</button>
+                </div>
+                <div class="admin-tabs">
+                    <button class="tab-btn active" data-tab="settings" onclick="switchAdminTab('settings')">設定</button>
+                    <button class="tab-btn" data-tab="levels" onclick="switchAdminTab('levels')">レベル管理</button>
+                    <button class="tab-btn" data-tab="questions" onclick="switchAdminTab('questions')">問題管理</button>
+                    <button class="tab-btn" data-tab="links" onclick="switchAdminTab('links')">リンク管理</button>
+                    <button class="tab-btn" data-tab="progress" onclick="switchAdminTab('progress')">進捗確認</button>
+                </div>
+                <div class="admin-content" id="admin-content">
+                    <!-- 動的に生成 -->
+                </div>
+            </div>
+        </section>
+
+        <!-- キャッシュ復元ダイアログ -->
+        <div class="modal" id="cache-modal" style="display: none;">
+            <div class="modal-overlay" onclick="closeCacheModal()"></div>
+            <div class="modal-content glass-card">
+                <h3>前回の続きがあります</h3>
+                <p>中断した箇所から再開しますか？</p>
+                <div class="modal-actions">
+                    <button class="btn btn-secondary" onclick="startFresh()">最初から</button>
+                    <button class="btn btn-primary" onclick="resumeFromCache()">続きから</button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- トースト通知 -->
+    <div class="toast-container" id="toast-container"></div>
+
+    <!-- スクリプト -->
+    <script src="config.js"></script>
+    <script src="app.js"></script>
+    <script src="admin.js"></script>
+</body>
+</html>
